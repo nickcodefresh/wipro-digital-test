@@ -1,5 +1,8 @@
 apply plugin: 'java'
 apply plugin: 'eclipse'
+apply plugin:'application'
+
+mainClassName = "com.wipro.EntryPoint"
 
 repositories {
     mavenCentral()
@@ -17,6 +20,11 @@ dependencies {
 }
 
 version = '1.0'
+
+run {     
+    systemProperties System.getProperties()
+    args System.getProperty("exec.args").split()    
+}
 
 jar {
 	manifest.attributes provider: 'gradle'
