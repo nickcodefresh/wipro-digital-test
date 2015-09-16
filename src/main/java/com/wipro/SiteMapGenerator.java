@@ -2,8 +2,8 @@ package com.wipro;
 
 import org.apache.commons.lang3.StringUtils;
 
-import com.wipro.domain.Domain;
-import com.wipro.domain.LinkProvider;
+import com.wipro.domain.AbstractLink;
+import com.wipro.domain.HeadLink;
 
 /**
  * Generates the sitemap string for a domain.
@@ -11,9 +11,9 @@ import com.wipro.domain.LinkProvider;
 public class SiteMapGenerator {
 
 	private final static String NEWLINE = System.getProperty("line.separator");
-	private Domain domain;
+	private HeadLink domain;
 
-	public SiteMapGenerator(final Domain domain) {
+	public SiteMapGenerator(final HeadLink domain) {
 		this.domain = domain;
 	}
 
@@ -23,15 +23,16 @@ public class SiteMapGenerator {
 
 	}
 
-	private String processLinks(final int depth, final LinkProvider linkProvider) {
+	private String processLinks(final int depth, final AbstractLink linkProvider) {
 
-		StringBuilder sb = new StringBuilder(StringUtils.leftPad(linkProvider.getUrl(), linkProvider.getUrl().length() + (depth * 3)));
+		StringBuilder sb = new StringBuilder(
+				StringUtils.leftPad(linkProvider.getUrl(), linkProvider.getUrl().length() + (depth * 3)));
 		sb.append(NEWLINE);
 		linkProvider.getLinks().forEach(link -> {
 			sb.append(processLinks(depth + 1, link));
 		});
 		return sb.toString();
-		
+
 	}
 
 }

@@ -7,15 +7,13 @@ repositories {
 
 dependencies {
 	testCompile 'junit:junit:4.12'
-	compile 'edu.uci.ics:crawler4j:4.1'
 	compile 'org.slf4j:slf4j-api:1.7.12'
 	compile 'org.slf4j:slf4j-simple:1.7.12'
 	compile 'org.htmlparser:htmlparser:2.1'
 	compile 'org.apache.commons:commons-lang3:3.4'
 	compile 'org.eclipse.jetty:jetty-server:9.3.4.RC0'
 	compile 'org.eclipse.jetty:jetty-webapp:9.3.4.RC0'
-	
-	
+	compile 'com.google.collections:google-collections:1.0'
 }
 
 version = '1.0'

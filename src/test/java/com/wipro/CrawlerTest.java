@@ -10,16 +10,16 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.wipro.domain.Domain;
+import com.wipro.domain.HeadLink;
 import com.wipro.domain.Link;
 
-public class DomainProcessorTest {
+public class CrawlerTest {
 
 	private Server server;
 
 	@Before
 	public void startServer() throws Exception {
-		
+
 		server = new Server(8080);
 		server.setStopAtShutdown(true);
 		WebAppContext webAppContext = new WebAppContext();
@@ -28,7 +28,7 @@ public class DomainProcessorTest {
 		webAppContext.setClassLoader(getClass().getClassLoader());
 		server.setHandler(webAppContext);
 		server.start();
-	
+
 	}
 
 	@Test
@@ -36,21 +36,21 @@ public class DomainProcessorTest {
 
 		final String url = "http://localhost:8080/app/pageA.html";
 
-		Domain domain = new Domain(url);
-		DomainProcessor target = new DomainProcessor(domain);
+		Crawler target = new Crawler(url);
+		HeadLink entryPoint = target.process();
 
-		target.process();
+		assertEquals(url, entryPoint.getUrl());
 
-		assertEquals(url, domain.getUrl());
-
-		List<Link> links = domain.getLinks();
+		List<Link> links = entryPoint.getLinks();
 		assertEquals(1, links.size());
-		
+
 		Link pageBLink = links.get(0);
 		assertEquals("http://localhost:8080/app/pageB.html", pageBLink.getUrl());
 		assertEquals(2, pageBLink.getLinks().size());
-		assertEquals(1, pageBLink.getLinks().stream().filter(link -> link.getUrl().equals("http://www.google.co.uk")).count());
-		assertEquals(1, pageBLink.getLinks().stream().filter(link -> link.getUrl().equals("http://localhost:8080/app/cat.png")).count());
+		assertEquals(1,
+				pageBLink.getLinks().stream().filter(link -> link.getUrl().equals("http://www.google.co.uk")).count());
+		assertEquals(1, pageBLink.getLinks().stream()
+				.filter(link -> link.getUrl().equals("http://localhost:8080/app/cat.png")).count());
 
 	}
 
@@ -58,5 +58,5 @@ public class DomainProcessorTest {
 	public void shutdownServer() throws Exception {
 		server.stop();
 	}
-	
+
 }

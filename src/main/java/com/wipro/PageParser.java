@@ -10,14 +10,11 @@ import org.htmlparser.tags.ImageTag;
 import org.htmlparser.tags.LinkTag;
 import org.htmlparser.util.NodeList;
 import org.htmlparser.util.ParserException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import edu.uci.ics.crawler4j.crawler.WebCrawler;
-
+/**
+ * Parses a given HTML page and returns all of the links within it.
+ */
 public class PageParser {
-
-	protected static final Logger LOGGER = LoggerFactory.getLogger(WebCrawler.class);
 
 	private final String url;
 
@@ -25,20 +22,23 @@ public class PageParser {
 		this.url = url;
 	}
 
-	public List<String> getLinksOnPage() throws ParserException {
-
+	public List<String> getLinksOnPage() {
 
 		List<String> result = new ArrayList<>();
-		result.addAll(getLinks());
-		result.addAll(getImages());
-		
+		try {
+			result.addAll(getLinks());
+			result.addAll(getImages());
+		} catch (ParserException pe) {
+			// URL doesn't seem to work, so we just ignore it
+		}
+
 		return result;
 
 	}
 
 	private List<String> getLinks() throws ParserException {
 
-		Parser htmlParser = new Parser(url);
+		Parser htmlParser = new Parser(url);	
 		NodeList tagNodeList = htmlParser.extractAllNodesThatMatch(new NodeClassFilter(LinkTag.class));
 		List<String> result = new LinkedList<>();
 		for (int j = 0; j < tagNodeList.size(); j++) {
@@ -61,5 +61,5 @@ public class PageParser {
 		return result;
 
 	}
-	
+
 }

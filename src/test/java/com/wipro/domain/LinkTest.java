@@ -10,22 +10,22 @@ import org.junit.Test;
 
 public class LinkTest {
 
-	private Domain domain;
-	
+	private HeadLink domain;
+
 	@Before
 	public void setUp() {
-		domain = new Domain("http://www.test.com");
+		domain = new HeadLink("http://www.test.com");
 	}
-	
+
 	@Test
 	public void ensureNoDuplicateLinks() {
 
 		List<String> linkUrls = Arrays.asList(new String[] { "http://www.test.com/abc.html" });
-		List<Link> links = domain.addLinks(linkUrls);
-		
+		List<Link> links = domain.addLinks(domain, linkUrls);
+
 		Link link = links.get(0);
-		link.addLinks(linkUrls);
-		
+		domain.addLinks(link, linkUrls);
+
 		assertEquals(0, link.getLinks().size());
 
 	}
@@ -34,20 +34,20 @@ public class LinkTest {
 	public void domainMatch() {
 
 		List<String> linkUrls = Arrays.asList(new String[] { "http://www.test.com/abc.html" });
-		List<Link> links = domain.addLinks(linkUrls);
-		
+		List<Link> links = domain.addLinks(domain, linkUrls);
+
 		assertTrue(links.get(0).isWithinDomain());
 
 	}
-	
+
 	@Test
 	public void domainMismatch() {
 
 		List<String> linkUrls = Arrays.asList(new String[] { "http://www.bad.com/abc.html" });
-		List<Link> links = domain.addLinks(linkUrls);
-		
+		List<Link> links = domain.addLinks(domain, linkUrls);
+
 		assertFalse(links.get(0).isWithinDomain());
 
 	}
-	
+
 }

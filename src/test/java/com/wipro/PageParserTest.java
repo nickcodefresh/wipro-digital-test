@@ -40,7 +40,7 @@ public class PageParserTest {
 		assertEquals(1, links.stream().filter(link -> link.equals("http://localhost:8080/app/pageB.html")).count());
 
 	}
-	
+
 	@Test
 	public void processPageWithExternalLinkAndImage() throws Exception {
 
@@ -59,5 +59,5 @@ public class PageParserTest {
 	public void shutdownServer() throws Exception {
 		server.stop();
 	}
-	
+
 }

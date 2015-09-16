@@ -2,20 +2,15 @@ package com.wipro.domain;
 
 import java.net.URI;
 
-public class Link extends SiteNode implements LinkProvider {
+public class Link extends AbstractLink {
 
-	private final Domain domain;
+	private final HeadLink domain;
 
-	public Link(final Domain domain, final String url) {
+	Link(final HeadLink domain, final String url) {
 		super(url);
 		this.domain = domain;
 	}
 
-	@Override
-	protected Link addLink(final String url) {
-		return domain.createLink(this, url);
-	}
-	
 	@Override
 	public boolean isWithinDomain() {
 
@@ -25,8 +20,10 @@ public class Link extends SiteNode implements LinkProvider {
 			// host can be null for mail: links
 			return linkUri.getHost() != null && linkUri.getHost().equalsIgnoreCase(domainUri.getHost());
 		} catch (Exception e) {
+			// htmlparser library that we're using doesn't always extract URLs
+			// correctly, so we have to ignore an invalid ones. On a production
+			// system we'd never swallow an exception like this
 			return false;
-			//throw new RuntimeException(e);
 		}
 
 	}

@@ -1,24 +1,22 @@
 package com.wipro;
 
-import com.wipro.domain.Domain;
+import com.wipro.domain.HeadLink;
 
 public class EntryPoint {
 
-	private final Domain domain;
-	private DomainProcessor domainProcessor;
+	private Crawler domainProcessor;
 
-	public EntryPoint(final String domainUrl) {
-		domain = new Domain(domainUrl);
-		domainProcessor = new DomainProcessor(domain);
+	public EntryPoint(final String entryUrl) {
+		domainProcessor = new Crawler(entryUrl);
 	}
 
 	public void run() {
 
-		System.out.print(String.format("Processing %s ", domain.getUrl()));
-		domainProcessor.process();
+		System.out.print(String.format("Processing %s ", domainProcessor.getUrl()));
+		HeadLink entryPoint = domainProcessor.process();
 		System.out.println("");
-		
-		SiteMapGenerator smg = new SiteMapGenerator(domain);		
+
+		SiteMapGenerator smg = new SiteMapGenerator(entryPoint);
 		System.out.println(smg.generate());
 
 	}
